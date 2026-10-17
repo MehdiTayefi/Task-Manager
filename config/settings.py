@@ -131,3 +131,12 @@ UNFOLD= {
     "SITE_TITLE": "Task Manager",
     "SITE_HEADER": "Task Manager",
 }
+
+REST_FRAMEWORK= {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
