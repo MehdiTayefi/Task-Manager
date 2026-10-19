@@ -3,6 +3,10 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 from rest_framework import serializers
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User= get_user_model()
 
@@ -52,3 +56,26 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop("password_confirm")
         return User.objects.create_user(**validated_data)
+
+
+class ActiveUserRefreshTokenSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        try:
+            refresh= RefreshToken(attrs["refresh"])
+        except TokenError as exc:
+            raise InvalidToken(str(exc)) from exc
+
+        user_id = refresh.get(api_settings.USER_ID_CLAIM)
+
+        if user_id is None:
+            raise InvalidToken("invalid refresh token.")
+
+        user_exists = User.objects.filter(
+            **{api_settings.USER_ID_FIELD: user_id},
+            is_active= True,
+        ).exists()
+
+        if not user_exists:
+            raise InvalidToken("user is unavailable.")
+
+        return super().validate(attrs)
