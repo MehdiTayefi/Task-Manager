@@ -1,4 +1,4 @@
-"use strict";
+import { signIn } from "./auth.js?v=5";
 
 const form = document.querySelector("#register-form");
 const message = document.querySelector("#form-message");
@@ -32,8 +32,14 @@ form.addEventListener("submit", async (event) => {
             body: JSON.stringify(payload),
         });
         if (response.status === 201) {
-            form.reset();
-            showMessage("Your account is ready. You have successfully signed up.", "success");
+            try {
+                await signIn(payload.username, payload.password);
+                form.reset();
+                window.location.assign(document.body.dataset.tasksUrl);
+            } catch {
+                form.reset();
+                showMessage("Your account was created, but automatic sign-in failed. Please use the Sign in link below.", "error");
+            }
         } else if (response.status === 400) {
             const errors = await response.json();
             const lines = Object.entries(errors).map(([field, values]) => {
@@ -53,13 +59,3 @@ form.addEventListener("submit", async (event) => {
     }
 });
 
-document.querySelectorAll(".password-toggle").forEach((button) => {
-    button.addEventListener("click", () => {
-        const input = document.getElementById(button.getAttribute("aria-controls"));
-        const visible = input.type === "password";
-        input.type = visible ? "text" : "password";
-        button.textContent = visible ? "Hide" : "Show";
-        button.setAttribute("aria-pressed", String(visible));
-        button.setAttribute("aria-label", `${visible ? "Hide" : "Show"} ${input.id === "password" ? "password" : "password confirmation"}`);
-    });
-});

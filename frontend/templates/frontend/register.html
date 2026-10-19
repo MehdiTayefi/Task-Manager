@@ -1,5 +1,6 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+{% block body_class %}app-theme auth-theme{% endblock %}
 {% block title %}Create your account · Taskly{% endblock %}
 {% block content %}
 <div class="auth-layout">
@@ -33,9 +34,10 @@
             <div id="form-message" class="message" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
             <button class="submit-button" type="submit"><span>Create account</span><span aria-hidden="true">→</span></button>
         </form>
+        <p class="auth-switch">Already have an account? <a href="{% url 'frontend:login' %}">Sign in</a></p>
         <div class="card-footer"><svg aria-hidden="true" width="14" height="16" viewBox="0 0 14 16" fill="none"><rect x="2" y="7" width="10" height="8" rx="2" stroke="currentColor"/><path d="M4 7V4a3 3 0 0 1 6 0v3" stroke="currentColor"/></svg>Your personal space. Your next chapter.</div>
         <noscript><p class="message" data-state="error">Please enable JavaScript to create an account.</p></noscript>
     </section>
 </div>
 {% endblock %}
-{% block scripts %}<script src="{% static 'frontend/js/register.js' %}?v=2" defer></script>{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'frontend/js/register.js' %}?v=5" defer></script>{% endblock %}

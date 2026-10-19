@@ -1,0 +1,39 @@
+{% extends "frontend/app_base.html" %}
+{% load static %}
+{% block language %}fa{% endblock %}
+{% block direction %}rtl{% endblock %}
+{% block title %}کارهای من · Taskly{% endblock %}
+{% block content %}
+<div class="tasks-workspace">
+    <div class="workspace-heading"><div><div class="eyebrow">هر قدم کوچک، یک پیشرفت تازه</div><h1>کارهای من<span class="soft-dot">.</span></h1><p class="workspace-subtitle">ذهنت را سبک کن؛ از یک کار کوچک شروع کن.</p></div><button id="new-task" class="primary-action" type="button"><span aria-hidden="true">＋</span> کار جدید</button></div>
+    <div class="task-toolbar"><div class="task-filters"><div><label for="status-filter">وضعیت</label><select id="status-filter"><option value="">همه وضعیت‌ها</option value="todo">انجام‌نشده</option><option value="in_progress">در حال انجام</option><option value="done">انجام‌شده</option></select></div><div><label for="priority-filter">اولویت</label><select id="priority-filter"><option value="">همه اولویت‌ها</option><option value="low">کم</option><option value="medium">متوسط</option><option value="high">زیاد</option></select></div></div><span id="task-count" class="task-count" aria-live="polite"></span></div>
+    <div id="page-message" class="message" role="status" aria-live="polite" tabindex="-1"></div>
+    <div id="tasks-loading" class="task-empty" role="status"><span class="loading-orb" aria-hidden="true"></span><p>در حال دریافت کارها…</p></div>
+    <div id="tasks-empty" class="task-empty" hidden><span class="empty-icon" aria-hidden="true">✓</span><h2>جا برای یک شروع تازه هست</h2><p>کاری با این شرایط پیدا نشد. یک کار جدید بساز یا فیلترها را تغییر بده.</p></div>
+    <div id="task-list" class="task-grid" aria-label="فهرست کارها"></div>
+    <div class="pagination-bar" id="pagination" hidden><button id="previous-page" class="secondary-action" type="button">صفحه قبل</button><span id="page-number" aria-live="polite"></span><button id="next-page" class="secondary-action" type="button">صفحه بعد</button></div>
+    <button id="reload-tasks" class="secondary-action" type="button" hidden>تلاش دوباره</button>
+    <noscript><p class="message" data-state="error">برای مدیریت کارها، JavaScript مرورگر را فعال کن.</p></noscript>
+</div>
+<dialog id="task-dialog" class="task-dialog" aria-labelledby="task-dialog-title" dir="rtl">
+    <div class="dialog-heading"><h2 id="task-dialog-title">کار جدید</h2><button id="close-task-dialog" class="icon-button" type="button" aria-label="بستن فرم">×</button></div>
+    <p class="dialog-subtitle">یک قدم مشخص برای چیزی که می‌خواهی انجام بدهی.</p>
+    <form id="task-form">
+        <label for="task-title">عنوان کار</label><input id="task-title" name="title" maxlength="200" placeholder="مثلاً: تمرین Serializer" required>
+        <label for="task-description">توضیحات <span class="optional">(اختیاری)</span></label><textarea id="task-description" name="description" rows="3" placeholder="جزئیات بیشتری بنویس…"></textarea>
+        <div class="form-columns"><div><label for="task-status">وضعیت</label><select id="task-status" name="status"><option value="todo">انجام‌نشده</option><option value="in_progress">در حال انجام</option><option value="done">انجام‌شده</option></select></div><div><label for="task-priority">اولویت</label><select id="task-priority" name="priority"><option value="low">کم</option><option value="medium" selected>متوسط</option><option value="high">زیاد</option></select></div></div>
+        <label for="task-due-date">مهلت انجام <span class="optional">(اختیاری)</span></label><input id="task-due-date" type="date" name="due_date" dir="ltr">
+        <div id="task-form-message" class="message" role="status" aria-live="polite" tabindex="-1"></div>
+        <div class="dialog-actions"><button id="save-task" class="primary-action" type="submit">ذخیره کار</button><button id="cancel-task" class="secondary-action" type="button">انصراف</button></div>
+    </form>
+</dialog>
+<dialog id="delete-dialog" class="task-dialog delete-dialog" aria-labelledby="delete-title" dir="rtl"><div class="delete-symbol" aria-hidden="true">×</div><h2 id="delete-title">این کار حذف شود؟</h2><p id="delete-task-name"></p><p class="dialog-subtitle">بعد از حذف، امکان بازگرداندن این کار وجود ندارد.</p><div id="delete-message" class="message" role="status" aria-live="polite"></div><div class="dialog-actions"><button id="confirm-delete" class="danger-action" type="button">حذف کار</button><button id="cancel-delete" class="secondary-action" type="button" autofocus>انصراف</button></div></dialog>
+<dialog id="task-detail-dialog" class="task-dialog" aria-labelledby="task-detail-title" dir="rtl">
+    <div class="dialog-heading"><h2 id="task-detail-title">جزئیات کار</h2><button id="close-task-detail" type="button" class="icon-button" aria-label="بستن جزئیات">×</button></div>
+    <p id="task-detail-loading" class="dialog-subtitle" role="status">در حال دریافت جزئیات…</p>
+    <div id="task-detail-content" hidden><h3 id="detail-title" class="detail-title"></h3><p id="detail-description" class="detail-description"></p><dl class="detail-fields"><div><dt>وضعیت</dt><dd id="detail-status"></dd></div><div><dt>اولویت</dt><dd id="detail-priority"></dd></div><div><dt>مهلت انجام</dt><dd id="detail-due"></dd></div><div><dt>زمان ایجاد</dt><dd id="detail-created"></dd></div><div><dt>آخرین تغییر</dt><dd id="detail-updated"></dd></div></dl></div>
+    <div id="task-detail-message" class="message" role="status" aria-live="polite"></div>
+    <div class="dialog-actions"><button id="edit-task-from-detail" class="primary-action" type="button" hidden>ویرایش کار</button><button id="dismiss-task-detail" class="secondary-action" type="button">بستن</button></div>
+</dialog>
+{% endblock %}
+{% block page_scripts %}<script type="module" src="{% static 'frontend/js/tasks.js' %}?v=5"></script>{% endblock %}
