@@ -8,7 +8,7 @@ class Task(models.Model):
         IN_PROGRESS= "in_progress", "IN progres"
         DONE= "done", "Done"
 
-    class Pirority(models.TextChoices):
+    class Priority(models.TextChoices):
         LOW= "low", "Low"
         MEDIUM= "medium", "Medium"
         HIGH= "high", "High"
@@ -27,10 +27,10 @@ class Task(models.Model):
     )
     priority= models.CharField(
         max_length=20,
-        choices= Pirority.choices,
-        default= Pirority.MEDIUM
+        choices= Priority.choices,
+        default= Priority.MEDIUM
     )
-    due_date= models.DateTimeField(blank=True, null=True)
+    due_date= models.DateField(blank=True, null=True)
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at= models.DateTimeField(auto_now=True)
 
