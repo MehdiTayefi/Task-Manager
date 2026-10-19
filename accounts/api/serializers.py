@@ -79,3 +79,26 @@ class ActiveUserRefreshTokenSerializer(TokenRefreshSerializer):
             raise InvalidToken("user is unavailable.")
 
         return super().validate(attrs)
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= User
+        fields= ("id", "username", "email")
+        read_only_fields= fields
+
+class DeleteAccountSerializer(serializers.Serializer):
+    password= serializers.CharField(
+        write_only= True,
+        trim_whitespace= True,
+        style= {"input_type": "password"},
+    )
+
+    def validate_password(self, value):
+        user = self.context["request"].user
+
+        if not user.check_password(value):
+            raise serializers.ValidationError(
+                "Current password is incorrect!"
+            )
+
+        return value
