@@ -17,6 +17,7 @@ from .serializers import (
     UserSerializer,
     DeleteAccountSerializer
 )
+from demo.api.serializers import DemoTokenRefreshSerializer
 
 
 class RegisterView(CreateAPIView):
@@ -33,7 +34,7 @@ class LoginView(TokenObtainPairView):
 class RefreshView(TokenRefreshView):
     authentication_classes= []
     permission_classes= [AllowAny]
-    serializer_class= ActiveUserRefreshTokenSerializer
+    serializer_class= DemoTokenRefreshSerializer
 
 
 class LogoutView(TokenBlacklistView):

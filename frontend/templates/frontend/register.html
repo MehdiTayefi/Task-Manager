@@ -34,10 +34,14 @@
             <div id="form-message" class="message" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
             <button class="submit-button" type="submit"><span>ساخت حساب و شروع</span><span aria-hidden="true">←</span></button>
         </form>
+        <div class="auth-divider"><span>یا بدون ساخت حساب امتحان کن</span></div>
+        <button class="demo-start-button" type="button" data-demo-start><span aria-hidden="true">✦</span> امتحان دمو <span aria-hidden="true">←</span></button>
+        <p class="demo-start-hint">کارهای آماده، فضای شخصی و پاک‌سازی خودکار پس از پایان دمو</p>
+        <div id="demo-start-message" class="message" role="status" aria-live="polite" tabindex="-1"></div>
         <p class="auth-switch">از قبل حساب داری؟ <a href="{% url 'frontend:login' %}">وارد شو</a></p>
         <div class="card-footer"><span aria-hidden="true">◇</span>فضای شخصی تو برای قدم‌های بعدی.</div>
         <noscript><p class="message" data-state="error">برای ساخت حساب، JavaScript مرورگر را فعال کن.</p></noscript>
     </section>
 </div>
 {% endblock %}
-{% block scripts %}<script type="module" src="{% static 'frontend/js/register.js' %}?v=6"></script>{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'frontend/js/register.js' %}?v=7"></script>{% endblock %}

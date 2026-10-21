@@ -1,5 +1,5 @@
-import { signIn } from "./auth.js?v=6";
-import { registrationErrors } from "./messages.js?v=6";
+import { signIn } from "./auth.js?v=7";
+import { registrationErrors } from "./messages.js?v=7";
 const form = document.querySelector("#register-form");
 const message = document.querySelector("#form-message");
 const submitButton = form.querySelector('button[type="submit"]');

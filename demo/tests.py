@@ -60,7 +60,41 @@ class IsolatedDemoTests(TestCase):
         self.assertEqual(listing.status_code, 200)
         self.assertEqual(listing.json()["count"], 13)
         self.assertEqual(len(listing.json()["results"]), 10)
-        self.assertEqual(listing.json()["results"][0]["title"],"تکمیل گزارش پروژه",)
+        self.assertEqual(listing.json()["results"][0]["title"], "تکمیل گزارش پروژه")
+        expected_titles = [
+            "تکمیل گزارش پروژه",
+            "پرداخت قبض اینترنت",
+            "آماده‌کردن اسلایدهای ارائه",
+            "پاسخ به ایمیل‌های کاری",
+            "خرید مواد غذایی هفته",
+            "مرتب‌کردن فایل‌های لپ‌تاپ",
+            "مطالعه فصل سوم کتاب",
+            "رزرو وقت دندان‌پزشکی",
+            "تحویل تمرین برنامه‌نویسی",
+            "تهیه فهرست هزینه‌های ماه",
+            "به‌روزرسانی رزومه",
+            "پشتیبان‌گیری از فایل‌های مهم",
+            "برنامه‌ریزی هفته آینده",
+        ]
+        self.assertEqual(
+            [item["title"] for item in listing.json()["results"]],
+            expected_titles[:10],
+        )
+        second_page = client.get(
+            reverse("tasks:task-list"), {"page": 2}, **self.headers(response),
+        )
+        self.assertEqual(second_page.status_code, 200)
+        self.assertEqual(
+            [item["title"] for item in second_page.json()["results"]],
+            expected_titles[10:],
+        )
+        self.assertIsNone(second_page.json()["next"])
+        today = timezone.localdate()
+        self.assertEqual(user.tasks.get(title="تکمیل گزارش پروژه").due_date, today)
+        self.assertEqual(user.tasks.get(title="پرداخت قبض اینترنت").due_date, today + timedelta(days=1))
+        self.assertIsNone(user.tasks.get(title="رزرو وقت دندان‌پزشکی").due_date)
+        self.assertEqual(user.tasks.get(title="تحویل تمرین برنامه‌نویسی").due_date, today - timedelta(days=1))
+
 
     def test_two_visitors_never_share_tasks_or_mutate_each_other(self):
         a, _, first = self.start()

@@ -1,4 +1,4 @@
-import { signIn } from "./auth.js?v=6";
+import { signIn } from "./auth.js?v=7";
 const form = document.querySelector("#login-form");
 const message = document.querySelector("#form-message");
 const button = form.querySelector('[type="submit"]');
@@ -16,4 +16,8 @@ form.addEventListener("submit", async (event) => {
 });
 if (new URLSearchParams(window.location.search).get("deleted") === "1") {
     message.textContent = "حساب و کارهایت حذف و تمام ورودهای قبلی باطل شدند."; message.dataset.state = "success";
+}
+
+if (new URLSearchParams(window.location.search).get("demo_expired") === "1") {
+    message.textContent = "زمان دموی قبلی تمام شد. با دکمه «امتحان دمو» می‌توانی یک فضای تازه بسازی.";message.dataset.state = "success";
 }
