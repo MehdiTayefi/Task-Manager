@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'tasks',
+    'frontend.apps.FrontendConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

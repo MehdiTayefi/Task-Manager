@@ -1,0 +1,43 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+{% block body_class %}app-theme auth-theme{% endblock %}
+{% block title %}ساخت حساب | تسکلی{% endblock %}
+{% block content %}
+<div class="auth-layout register-layout">
+    <section class="intro" aria-labelledby="intro-title">
+        <div class="eyebrow"><span class="tiny-spark" aria-hidden="true">✦</span> شروع یک روز منظم‌تر</div>
+        <h1 id="intro-title">ایده‌های بزرگ.<br>قدم‌های کوچک.<br><span>پیشرفت واقعی.</span></h1>
+        <p class="intro-copy">برای تمام چیزهایی که در ذهن داری، یک جای آرام بساز.<br>کارهایت را مرتب کن و برای چیزهای مهم‌تر وقت بگذار.</p>
+        <div class="task-preview" aria-label="نمونه‌ای از فهرست کارهای منظم">
+            <div class="preview-top"><span class="preview-heading">یک شروع کوچک</span><span class="preview-dots" aria-hidden="true">•••</span></div>
+            <div class="preview-row"><span class="task-check checked" aria-hidden="true">✓</span><span class="task-name completed">برنامه امروز را بنویسم</span><span class="pill green">انجام‌شده</span></div>
+            <div class="preview-row"><span class="task-check selected" aria-hidden="true"></span><span class="task-name">ایده بعدی‌ام را عملی کنم</span><span class="pill blue">در حال انجام</span></div>
+            <div class="preview-row"><span class="task-check" aria-hidden="true"></span><span class="task-name">برای یک استراحت جا باز کنم</span><span class="pill muted">انجام‌نشده</span></div>
+            <div class="preview-bottom"><span class="progress-track" aria-hidden="true"><span></span></span><span>یک قدم نزدیک‌تر.</span></div>
+        </div>
+        <div class="benefits"><span><b aria-hidden="true">✓</b> کارهای تو، فضای تو</span><span><b aria-hidden="true">✓</b> ساده و متمرکز</span></div>
+    </section>
+    <section class="card" aria-labelledby="page-title">
+        <div class="card-top"><span class="card-icon" aria-hidden="true">↗</span><span class="step-label">از همین‌جا شروع کن</span></div>
+        <h2 id="page-title">حساب خودت را بساز</h2>
+        <p class="subtitle">یک شروع تازه برای کارها و برنامه‌هایت.</p>
+        <form id="register-form" action="{% url 'accounts:register' %}" method="post">
+            <label for="username">نام کاربری</label>
+            <input id="username" name="username" type="text" placeholder="یک نام کاربری انتخاب کن" autocomplete="username" maxlength="150" autocapitalize="none" spellcheck="false" dir="auto" required>
+            <label for="email">آدرس ایمیل</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" maxlength="254" dir="ltr" required>
+            <label for="password">رمز عبور</label>
+            <div class="password-field"><input id="password" name="password" type="password" placeholder="یک رمز قوی انتخاب کن" autocomplete="new-password" aria-describedby="password-help" required><button type="button" class="password-toggle" aria-label="نمایش رمز عبور" aria-controls="password" aria-pressed="false">نمایش</button></div>
+            <p id="password-help" class="field-help">رمزی قوی، بدون فاصله و متفاوت از اطلاعات شخصی‌ات انتخاب کن.</p>
+            <label for="password-confirm">تکرار رمز عبور</label>
+            <div class="password-field"><input id="password-confirm" name="password_confirm" type="password" placeholder="رمزت را دوباره وارد کن" autocomplete="new-password" required><button type="button" class="password-toggle" aria-label="نمایش تکرار رمز عبور" aria-controls="password-confirm" aria-pressed="false">نمایش</button></div>
+            <div id="form-message" class="message" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
+            <button class="submit-button" type="submit"><span>ساخت حساب و شروع</span><span aria-hidden="true">←</span></button>
+        </form>
+        <p class="auth-switch">از قبل حساب داری؟ <a href="{% url 'frontend:login' %}">وارد شو</a></p>
+        <div class="card-footer"><span aria-hidden="true">◇</span>فضای شخصی تو برای قدم‌های بعدی.</div>
+        <noscript><p class="message" data-state="error">برای ساخت حساب، JavaScript مرورگر را فعال کن.</p></noscript>
+    </section>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'frontend/js/register.js' %}?v=6"></script>{% endblock %}

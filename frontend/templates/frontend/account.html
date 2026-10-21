@@ -1,0 +1,34 @@
+{% extends "frontend/app_base.html" %}
+{% load static %}
+{% block title %}حساب کاربری · Taskly{% endblock %}
+{% block content %}
+<div class="profile-workspace">
+    <div class="workspace-heading"><div><div class="eyebrow">فضای شخصی تو</div><h1>حساب کاربری<span class="soft-dot">.</span></h1><p class="workspace-subtitle">هر پیشرفت، از خودت شروع می‌شود.</p></div><a class="quiet-link" href="{% url 'frontend:tasks' %}">کارهای من <span aria-hidden="true">↗</span></a></div>
+    <div class="profile-grid">
+        <section class="card profile-card" aria-labelledby="page-title">
+            <div class="card-top"><span class="card-icon" aria-hidden="true">↗</span><span class="step-label">اطلاعات شخصی</span></div>
+            <h2 id="page-title">پروفایل من</h2><p class="subtitle">اطلاعاتی که این فضا را به تو اختصاص می‌دهد.</p>
+            <p id="loading-message" class="loading-text" role="status">در حال دریافت اطلاعات حساب…</p>
+            <div id="profile-content" hidden>
+                <div class="profile-heading"><div id="avatar" class="profile-avatar" aria-hidden="true"></div><div><h3 id="profile-name" dir="auto"></h3><span class="profile-badge"><span class="status-dot" aria-hidden="true"></span>وارد حساب شده‌ای</span></div></div>
+                <dl class="profile-details"><div><dt>نام کاربری</dt><dd id="profile-username" dir="auto"></dd></div><div><dt>آدرس ایمیل</dt><dd id="profile-email" dir="auto"></dd></div></dl>
+            </div>
+            <div id="form-message" class="message" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
+            <button id="retry-button" class="submit-button" type="button" hidden>تلاش دوباره</button>
+            <noscript><p class="message" data-state="error">برای نمایش حساب کاربری، JavaScript مرورگر را فعال کن.</p></noscript>
+        </section>
+        <aside class="workspace-note"><div class="note-icon" aria-hidden="true">✦</div><h2>ذهن سبک‌تر.<br>قدم‌های روشن‌تر.</h2><p>برنامه‌هایت را در یک جا نگه دار.<br>هر وقت آماده‌ای، قدم بعدی را بردار.</p><a class="quiet-link" href="{% url 'frontend:tasks' %}">رفتن به کارهای من <span aria-hidden="true">←</span></a></aside>
+    </div>
+    <section class="danger-zone" aria-labelledby="danger-title"><div><h2 id="danger-title">حذف حساب کاربری</h2><p>با حذف حساب، تمام کارهایت پاک و ورودهای فعال در همه دستگاه‌ها باطل می‌شوند. این عملیات قابل بازگشت نیست.</p></div><button id="open-delete-account" class="danger-outline" type="button" disabled>حذف حساب من</button></section>
+</div>
+<dialog id="delete-account-dialog" class="task-dialog delete-dialog" aria-labelledby="delete-account-title" dir="rtl">
+    <div class="dialog-heading"><h2 id="delete-account-title">حسابت را حذف می‌کنی؟</h2><button id="close-delete-account" class="icon-button" type="button" aria-label="بستن پنجره حذف حساب">×</button></div>
+    <p class="dialog-subtitle">حساب، تمام کارها و دسترسی ورودهایت حذف یا باطل می‌شوند. برای تأیید، رمز فعلی را وارد کن.</p>
+    <form id="delete-account-form">
+        <label for="current-password">رمز عبور فعلی</label><div class="password-field"><input id="current-password" name="password" type="password" autocomplete="current-password" required><button type="button" class="password-toggle" aria-label="نمایش رمز عبور" aria-controls="current-password" aria-pressed="false">نمایش</button></div>
+        <div id="delete-account-message" class="message" role="status" aria-live="polite" tabindex="-1"></div>
+        <div class="dialog-actions"><button id="confirm-delete-account" class="danger-action" type="submit">حذف دائمی حساب</button><button id="cancel-delete-account" class="secondary-action" type="button">انصراف</button></div>
+    </form>
+</dialog>
+{% endblock %}
+{% block page_scripts %}<script type="module" src="{% static 'frontend/js/account.js' %}?v=6"></script>{% endblock %}
