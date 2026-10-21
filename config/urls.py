@@ -7,4 +7,5 @@ urlpatterns = [
     path("api/v1/users/", include("accounts.api.users_urls")),
     path("api/v1/", include("tasks.api.urls")),
     path("", include("frontend.urls")),
+    path("browser-auth/demo/", include("demo.api.urls"))
 ]
