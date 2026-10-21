@@ -1,4 +1,4 @@
-import { authFetch, readJSON, finishAccountDeletion } from "./auth.js?v=6";
+import { authFetch, readJSON, finishAccountDeletion } from "./auth.js?v=7";
 const $ = (selector) => document.querySelector(selector);
 const message = $("#form-message"), loading = $("#loading-message"), profile = $("#profile-content");
 const retry = $("#retry-button"), openDelete = $("#open-delete-account");
@@ -11,7 +11,7 @@ async function loadProfile() {
         const response = await authFetch(document.body.dataset.meUrl);
         const user = await readJSON(response);
         if (!response.ok) throw new Error();
-        $("#profile-name").textContent = user.username;
+        $("#profile-name").textContent = document.body.dataset.demoSession === "true" ? "کاربر آزمایشی" : user.username;
         $("#profile-username").textContent = user.username;
         $("#profile-email").textContent = user.email;
         $("#avatar").textContent = Array.from(user.username)[0].toUpperCase();
@@ -51,3 +51,9 @@ form.addEventListener("submit", async (event) => {
 });
 retry.addEventListener("click", loadProfile);
 loadProfile();
+
+document.addEventListener("demo:status", () => {
+    $("#profile-name").textContent = "کاربر آزمایشی";
+    const badge = document.querySelector(".profile-badge");
+    if (badge) badge.textContent = "فضای آزمایشی شخصی";
+});

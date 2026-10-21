@@ -114,3 +114,14 @@ export async function finishAccountDeletion() {
     try { await postBrowser(routes.logoutUrl); } catch { /* The remaining cookie is revoked and cannot authenticate. */ }
     window.location.replace(`${routes.loginUrl}?deleted=1`);
 }
+
+
+export async function startDemo() {
+    const response = await postBrowser(routes.demoStartUrl);
+    const data = await readJSON(response);
+    if (response.status !== 201 || !data.access) {
+        throw new Error(response.status === 403 ? "اعتبار صفحه تمام شده است؛ صفحه را تازه کن." : response.status === 429 ? "تعداد درخواست‌های دمو زیاد است. کمی بعد دوباره امتحان کن." : "شروع دمو انجام نشد. دوباره تلاش کن.");
+    }
+    accessToken = data.access;
+    return data;
+}

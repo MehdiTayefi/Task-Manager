@@ -1,4 +1,3 @@
-"""Cookie-based browser adapter. Existing JSON API endpoints stay unchanged."""
 import json
 
 from django.conf import settings
@@ -13,7 +12,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from accounts.api.serializers import ActiveUserRefreshTokenSerializer
+from demo.api.serializers import DemoTokenRefreshSerializer
 
 
 class BrowserTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -26,11 +25,11 @@ COOKIE_NAME = "taskly_refresh"
 COOKIE_PATH = "/browser-auth/"
 
 
-def set_refresh_cookie(response, value):
+def set_refresh_cookie(response, value, max_age=None):
     response.set_cookie(
         COOKIE_NAME,
         value,
-        max_age=int(api_settings.REFRESH_TOKEN_LIFETIME.total_seconds()),
+        max_age=int(api_settings.REFRESH_TOKEN_LIFETIME.total_seconds()) if max_age is None else max_age,
         httponly=True,
         secure=getattr(settings, "FRONTEND_AUTH_COOKIE_SECURE", not settings.DEBUG),
         samesite="Strict",
@@ -75,7 +74,7 @@ def browser_refresh(request):
     if not value:
         return JsonResponse({"detail": "Please sign in."}, status=401)
 
-    serializer = ActiveUserRefreshTokenSerializer(
+    serializer = DemoTokenRefreshSerializer(
         data={"refresh": value}, context={"request": request},
     )
     try:
@@ -87,7 +86,10 @@ def browser_refresh(request):
 
     tokens = serializer.validated_data
     response = JsonResponse({"access": tokens["access"]})
-    set_refresh_cookie(response, tokens.get("refresh", value))
+    new_refresh = tokens.get("refresh", value)
+    from django.utils import timezone
+    expires = RefreshToken(new_refresh)["exp"]
+    set_refresh_cookie(response, new_refresh, max_age=max(1, expires-int(timezone.now().timestamp())))
     return response
 
 
@@ -98,7 +100,10 @@ def browser_logout(request):
     value = request.COOKIES.get(COOKIE_NAME)
     if value:
         try:
-            RefreshToken(value).blacklist()
+            token = RefreshToken(value)
+            from demo.api.services import delete_demo_user
+            if not delete_demo_user(token.get(api_settings.USER_ID_CLAIM)):
+                token.blacklist()
         except TokenError:
             pass
     response = HttpResponse(status=204)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tasks',
     'frontend.apps.FrontendConfig',
+    'demo.apps.DemoConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -51,6 +52,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
+    'demo.middleware.DemoCleanupMiddleware',
+
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -153,3 +157,17 @@ SIMPLE_JWT= {
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer", ),
 }
+
+
+DEMO_SESSION_MINUTES = int(
+    os.environ.get("DEMO_SESSION_MINUTES", "30")
+)
+
+DEMO_CREATE_RATE = os.environ.get(
+    "DEMO_CREATE_RATE",
+    "10/hour",
+)
+
+DEMO_CLEANUP_BATCH_SIZE = int(
+    os.environ.get("DEMO_CLEANUP_BATCH_SIZE", "100")
+)

@@ -8,6 +8,7 @@
     <a class="brand" href="{% url 'frontend:tasks' %}"><span class="brand-mark" aria-hidden="true">✓</span>تسکلی<span class="brand-dot">.</span></a>
     <div class="app-header-end"><span class="app-header-caption">هر قدم کوچک، یک پیشرفت تازه</span><button id="menu-toggle" class="icon-button" type="button" aria-label="بازکردن منو" aria-expanded="false" aria-controls="app-menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button></div>
 </header>
+<section id="demo-banner" class="demo-banner" hidden aria-label="اطلاعات نسخه آزمایشی" dir="rtl"><div class="demo-banner-copy"><span class="demo-badge">نسخه آزمایشی</span><span>این کارها فقط برای تو ساخته شده‌اند و با پایان دمو پاک می‌شوند.</span></div><div class="demo-banner-actions"><span class="demo-time-label">زمان باقی‌مانده <b id="demo-countdown" dir="ltr"></b></span><button id="end-demo" type="button">پایان دمو</button></div><div id="demo-banner-message" class="message" role="status" aria-live="polite"></div></section>
 <dialog id="app-menu" class="menu-drawer" aria-labelledby="menu-title" dir="rtl">
     <div class="drawer-heading"><span id="menu-title">فضای کار تو</span><button id="menu-close" type="button" class="icon-button" aria-label="بستن منو">×</button></div>
     <p class="drawer-caption">یک جای آرام برای قدم بعدی.</p>
@@ -20,4 +21,4 @@
 </dialog>
 {% endblock %}
 {% block site_footer %}<footer class="app-footer" dir="ltr"><span>© {% now "Y" %} تسکلی</span><span>با قدم‌های خودت پیش برو.</span></footer>{% endblock %}
-{% block scripts %}<script type="module" src="{% static 'frontend/js/shell.js' %}?v=6"></script>{% block page_scripts %}{% endblock %}{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'frontend/js/shell.js' %}?v=7"></script>{% block page_scripts %}{% endblock %}{% endblock %}
