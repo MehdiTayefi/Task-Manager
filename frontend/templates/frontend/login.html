@@ -1,38 +1,38 @@
 {% extends "frontend/base.html" %}
 {% load static %}
 {% block body_class %}app-theme auth-theme{% endblock %}
-{% block title %}Welcome back · Taskly{% endblock %}
+{% block title %}ورود به حساب | تسکلی{% endblock %}
 {% block content %}
 <div class="auth-layout login-layout">
     <section class="intro" aria-labelledby="intro-title">
-        <div class="eyebrow"><span class="tiny-spark" aria-hidden="true">✦</span> A LITTLE FOCUS GOES A LONG WAY</div>
-        <h1 id="intro-title">Your next step.<br>Your own pace.<br><span>Welcome back.</span></h1>
-        <p class="intro-copy">Pick up where you left off.<br>Your space for a clearer, more intentional day.</p>
-        <div class="task-preview">
-            <div class="preview-top"><span class="preview-heading">A fresh perspective</span><span class="preview-dots" aria-hidden="true">•••</span></div>
-            <div class="preview-row"><span class="task-check checked" aria-hidden="true">✓</span><span class="task-name completed">Take the first step</span><span class="pill green">Done</span></div>
-            <div class="preview-row"><span class="task-check selected" aria-hidden="true"></span><span class="task-name">Keep your momentum going</span><span class="pill blue">Up next</span></div>
-            <div class="preview-bottom"><span class="progress-track" aria-hidden="true"><span></span></span><span>Progress starts here.</span></div>
+        <div class="eyebrow"><span class="tiny-spark" aria-hidden="true">✦</span> یک جای آرام برای قدم بعدی</div>
+        <h1 id="intro-title">ذهنت سبک‌تر.<br>مسیرت روشن‌تر.<br><span>خوش برگشتی.</span></h1>
+        <p class="intro-copy">از همان‌جایی که بودی، ادامه بده.<br>کارهایت اینجا منتظر یک شروع تازه‌اند.</p>
+        <div class="task-preview" aria-label="نمونه‌ای از برنامه‌ریزی کارها">
+            <div class="preview-top"><span class="preview-heading">قدم‌های کوچک امروز</span><span class="preview-dots" aria-hidden="true">•••</span></div>
+            <div class="preview-row"><span class="task-check checked" aria-hidden="true">✓</span><span class="task-name completed">برای روزم برنامه بچینم</span><span class="pill green">انجام‌شده</span></div>
+            <div class="preview-row"><span class="task-check selected" aria-hidden="true"></span><span class="task-name">یک قدم به هدفم نزدیک‌تر شوم</span><span class="pill blue">در حال انجام</span></div>
+            <div class="preview-bottom"><span class="progress-track" aria-hidden="true"><span></span></span><span>هر قدم، یک پیشرفت.</span></div>
         </div>
-        <div class="benefits"><span><b aria-hidden="true">✓</b> Your tasks, your space</span><span><b aria-hidden="true">✓</b> Simple by design</span></div>
+        <div class="benefits"><span><b aria-hidden="true">✓</b> کارهای تو، فضای تو</span><span><b aria-hidden="true">✓</b> ساده و متمرکز</span></div>
     </section>
     <section class="card" aria-labelledby="page-title">
-        <div class="card-top"><span class="card-icon" aria-hidden="true">↗</span><span class="step-label">GOOD TO SEE YOU AGAIN</span></div>
-        <h2 id="page-title">Sign in to your space</h2>
-        <p class="subtitle">One less thing between you and your goals.</p>
+        <div class="card-top"><span class="card-icon" aria-hidden="true">↗</span><span class="step-label">ادامه مسیر از همین‌جاست</span></div>
+        <h2 id="page-title">ورود به حساب</h2>
+        <p class="subtitle">به فضای شخصی خودت برگرد.</p>
         <form id="login-form" action="{% url 'frontend:browser-login' %}" method="post">
             {% csrf_token %}
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text" placeholder="Your username" autocomplete="username" maxlength="150" required>
-            <label for="password">Password</label>
-            <div class="password-field"><input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" required><button type="button" class="password-toggle" aria-label="Show password" aria-controls="password" aria-pressed="false">Show</button></div>
+            <label for="username">نام کاربری</label>
+            <input id="username" name="username" type="text" placeholder="نام کاربری‌ات را بنویس" autocomplete="username" maxlength="150" autocapitalize="none" spellcheck="false" dir="auto" required>
+            <label for="password">رمز عبور</label>
+            <div class="password-field"><input id="password" name="password" type="password" placeholder="رمز عبورت را وارد کن" autocomplete="current-password" required><button type="button" class="password-toggle" aria-label="نمایش رمز عبور" aria-controls="password" aria-pressed="false">نمایش</button></div>
             <div id="form-message" class="message" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
-            <button class="submit-button" type="submit"><span>Sign in</span><span aria-hidden="true">→</span></button>
+            <button class="submit-button" type="submit"><span>ورود به حساب</span><span aria-hidden="true">←</span></button>
         </form>
-        <p class="auth-switch">New here? <a href="{% url 'frontend:register' %}">Create an account</a></p>
-        <div class="card-footer"><span aria-hidden="true">◇</span>A calmer day starts with a clear mind.</div>
-        <noscript><p class="message" data-state="error">Please enable JavaScript to sign in.</p></noscript>
+        <p class="auth-switch">هنوز حساب نداری؟ <a href="{% url 'frontend:register' %}">حساب بساز</a></p>
+        <div class="card-footer"><span aria-hidden="true">◇</span>کمی تمرکز، یک روز آرام‌تر.</div>
+        <noscript><p class="message" data-state="error">برای ورود، JavaScript مرورگر را فعال کن.</p></noscript>
     </section>
 </div>
 {% endblock %}
-{% block scripts %}<script type="module" src="{% static 'frontend/js/login.js' %}?v=5"></script>{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'frontend/js/login.js' %}?v=6"></script>{% endblock %}

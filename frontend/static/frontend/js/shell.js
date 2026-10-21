@@ -1,4 +1,4 @@
-import { signOut } from "./auth.js?v=5";
+import { signOut } from "./auth.js?v=6";
 const menu = document.querySelector("#app-menu");
 const toggle = document.querySelector("#menu-toggle");
 const close = document.querySelector("#menu-close");

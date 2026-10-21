@@ -87,7 +87,6 @@ def browser_refresh(request):
 
     tokens = serializer.validated_data
     response = JsonResponse({"access": tokens["access"]})
-    # Supports rotation enabled in the supplied project's settings.
     set_refresh_cookie(response, tokens.get("refresh", value))
     return response
 
@@ -101,7 +100,6 @@ def browser_logout(request):
         try:
             RefreshToken(value).blacklist()
         except TokenError:
-            # Expired/already blacklisted refresh: still clear the browser cookie.
             pass
     response = HttpResponse(status=204)
     clear_refresh_cookie(response)

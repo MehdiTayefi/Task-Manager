@@ -31,7 +31,7 @@ export function errorText(data, fallback) {
 
 export async function postBrowser(url, data = {}) {
     const target = new URL(url, window.location.origin);
-    if (target.origin !== window.location.origin) throw new Error("Only same-origin requests are allowed.");
+    if (target.origin !== window.location.origin) throw new Error("ارسال درخواست فقط به همین سایت مجاز است.");
     return fetch(target, {
         method: "POST", credentials: "same-origin", mode: "same-origin", cache: "no-store",
         headers: {"Content-Type": "application/json", "Accept": "application/json", "X-CSRFToken": csrfToken()},
@@ -42,9 +42,9 @@ export async function postBrowser(url, data = {}) {
 export async function signIn(username, password) {
     const response = await postBrowser(routes.browserLoginUrl, {username, password});
     const data = await readJSON(response);
-    if (!response.ok) throw new Error(errorText(data, response.status === 403 ? "Your page has expired. Reload and try again." : "Unable to sign in. Please try again."));
+    if (!response.ok) throw new Error(response.status === 403 ? "اعتبار صفحه تمام شده؛ صفحه را تازه کن و دوباره تلاش کن." : response.status === 401 ? "نام کاربری یا رمز عبور درست نیست، یا حساب غیرفعال شده است." : "ورود انجام نشد. اطلاعات را بررسی کن و دوباره تلاش کن.");
     accessToken = data.access;
-    if (!accessToken) throw new Error("The server returned an incomplete response.");
+    if (!accessToken) throw new Error("پاسخ سرور کامل نبود. دوباره تلاش کن.");
 }
 
 export function refreshAccess() {
@@ -56,11 +56,11 @@ export function refreshAccess() {
             accessToken = null;
             if (response.status === 401) {
                 window.location.replace(routes.loginUrl);
-                throw new Error("Please sign in to continue.");
+                throw new Error("برای ادامه دوباره وارد حساب شو.");
             }
-            throw new Error(errorText(data, "Unable to restore your session. Reload and try again."));
+            throw new Error("تمدید ورود انجام نشد. صفحه را تازه کن و دوباره تلاش کن.");
         }
-        if (!data.access) throw new Error("The server returned an incomplete response.");
+        if (!data.access) throw new Error("پاسخ سرور کامل نبود. دوباره تلاش کن.");
         accessToken = data.access;
         return accessToken;
     };
@@ -73,7 +73,7 @@ export function refreshAccess() {
 
 export async function authFetch(url, options = {}) {
     const target = new URL(url, window.location.origin);
-    if (target.origin !== window.location.origin) throw new Error("Only same-origin requests are allowed.");
+    if (target.origin !== window.location.origin) throw new Error("ارسال درخواست فقط به همین سایت مجاز است.");
     if (!accessToken) await refreshAccess();
     const send = () => {
         const headers = new Headers(options.headers || {});
@@ -88,7 +88,7 @@ export async function authFetch(url, options = {}) {
         if (response.status === 401) {
             accessToken = null;
             window.location.replace(routes.loginUrl);
-            throw new Error("Please sign in to continue.");
+            throw new Error("برای ادامه دوباره وارد حساب شو.");
         }
     }
     return response;
@@ -97,7 +97,7 @@ export async function authFetch(url, options = {}) {
 export async function signOut() {
     const perform = async () => {
         const response = await postBrowser(routes.logoutUrl);
-        if (!response.ok) throw new Error("Unable to sign out. Please try again.");
+        if (!response.ok) throw new Error("خروج از حساب انجام نشد. دوباره تلاش کن.");
         accessToken = null;
         if (channel) channel.postMessage("signed-out");
         window.location.replace(routes.loginUrl);

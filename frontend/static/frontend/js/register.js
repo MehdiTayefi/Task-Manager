@@ -1,61 +1,25 @@
-import { signIn } from "./auth.js?v=5";
-
+import { signIn } from "./auth.js?v=6";
+import { registrationErrors } from "./messages.js?v=6";
 const form = document.querySelector("#register-form");
 const message = document.querySelector("#form-message");
 const submitButton = form.querySelector('button[type="submit"]');
-const fieldLabels = {
-    username: "Username", email: "Email address", password: "Password",
-    password_confirm: "Confirm password", non_field_errors: "Error", detail: "Error",
-};
-
-function showMessage(text, state) {
-    message.textContent = text;
-    message.dataset.state = state;
-    if (text) message.focus();
-}
-
+function showMessage(text, state) {message.textContent = text; message.dataset.state = state; if(text) message.focus();}
 form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (submitButton.disabled) return;
+    event.preventDefault(); if (submitButton.disabled) return;
     showMessage("", "");
     const payload = Object.fromEntries(new FormData(form));
-    if (payload.password !== payload.password_confirm) {
-        showMessage("Passwords do not match.", "error");
-        return;
-    }
-    submitButton.disabled = true;
-    submitButton.textContent = "Creating account…";
+    if (/\s/u.test(payload.password)) {showMessage("رمز عبور نباید فاصله، تب یا خط جدید داشته باشد.", "error"); return;}
+    if (payload.password !== payload.password_confirm) {showMessage("رمز عبور و تکرارش یکسان نیستند.", "error"); return;}
+    submitButton.disabled = true; submitButton.textContent = "در حال ساخت حساب…";
     try {
         const response = await fetch(form.action, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(payload),
+            method:"POST", headers:{"Content-Type":"application/json", "Accept":"application/json"}, body:JSON.stringify(payload),
         });
         if (response.status === 201) {
-            try {
-                await signIn(payload.username, payload.password);
-                form.reset();
-                window.location.assign(document.body.dataset.tasksUrl);
-            } catch {
-                form.reset();
-                showMessage("Your account was created, but automatic sign-in failed. Please use the Sign in link below.", "error");
-            }
-        } else if (response.status === 400) {
-            const errors = await response.json();
-            const lines = Object.entries(errors).map(([field, values]) => {
-                const label = fieldLabels[field] || field;
-                const text = Array.isArray(values) ? values.join(" ") : String(values);
-                return `${label}: ${text}`;
-            });
-            showMessage(lines.join("\n"), "error");
-        } else {
-            showMessage("We couldn’t create your account. Please try again.", "error");
-        }
-    } catch {
-        showMessage("Unable to reach the server. Check your connection and try again.", "error");
-    } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Create account";
-    }
+            try {await signIn(payload.username,payload.password);form.reset();window.location.assign(document.body.dataset.tasksUrl);}
+            catch {form.reset();showMessage("حسابت ساخته شد، ولی ورود خودکار انجام نشد. از لینک «وارد شو» استفاده کن.", "error");}
+        } else if (response.status === 400) {showMessage(registrationErrors(await response.json()), "error");}
+        else {showMessage("ساخت حساب انجام نشد. دوباره تلاش کن.", "error");}
+    } catch {showMessage("ارتباط با سرور برقرار نشد یا پاسخ معتبر نبود. دوباره تلاش کن.", "error");}
+    finally {submitButton.disabled = false;submitButton.textContent = "ساخت حساب و شروع ←";}
 });
-

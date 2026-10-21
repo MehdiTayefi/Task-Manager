@@ -1,4 +1,4 @@
-import { authFetch, readJSON, finishAccountDeletion } from "./auth.js?v=5";
+import { authFetch, readJSON, finishAccountDeletion } from "./auth.js?v=6";
 const $ = (selector) => document.querySelector(selector);
 const message = $("#form-message"), loading = $("#loading-message"), profile = $("#profile-content");
 const retry = $("#retry-button"), openDelete = $("#open-delete-account");

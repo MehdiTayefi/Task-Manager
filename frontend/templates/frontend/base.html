@@ -1,13 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="{% block language %}en{% endblock %}" dir="{% block direction %}ltr{% endblock %}">
+<html lang="{% block language %}fa{% endblock %}" dir="{% block direction %}rtl{% endblock %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="dark">
     <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>{% block title %}Taskly — Make room for what matters{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'frontend/css/app.css' %}?v=5">
+    <title>{% block title %}تسکلی | برای کارهای مهم‌تر جا باز کن{% endblock %}</title>
+    <link rel="preload" href="{% static 'frontend/fonts/Vazirmatn.woff2' %}" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="{% static 'frontend/css/app.css' %}?v=6">
 </head>
 <body class="{% block body_class %}{% endblock %}"
     data-login-url="{% url 'frontend:login' %}"
@@ -22,12 +23,12 @@
     <div class="ambient ambient-one" aria-hidden="true"></div>
     <div class="ambient ambient-two" aria-hidden="true"></div>
     {% block site_header %}<header class="site-header" dir="ltr">
-        <a class="brand" href="{% url 'frontend:home' %}" aria-label="Taskly home"><span class="brand-mark" aria-hidden="true">✓</span>taskly<span class="brand-dot">.</span></a>
-        {% block header_actions %}<nav class="header-links" aria-label="Account navigation"><a href="{% url 'frontend:login' %}">Sign in</a><a class="nav-button" href="{% url 'frontend:register' %}">Get started <span aria-hidden="true">↗</span></a></nav>{% endblock %}
+        <a class="brand" href="{% url 'frontend:home' %}" aria-label="صفحه اصلی تسکلی"><span class="brand-mark" aria-hidden="true">✓</span>تسکلی<span class="brand-dot">.</span></a>
+        {% block header_actions %}<nav class="header-links" aria-label="ورود و ثبت‌نام"><a href="{% url 'frontend:login' %}">ورود</a><a class="nav-button" href="{% url 'frontend:register' %}">ساخت حساب <span aria-hidden="true">↗</span></a></nav>{% endblock %}
     </header>{% endblock %}
     <main class="container">{% block content %}{% endblock %}</main>
-    {% block site_footer %}<footer class="site-footer"><span>© {% now "Y" %} Taskly</span><span>One task at a time.</span></footer>{% endblock %}
-    <script src="{% static 'frontend/js/ui.js' %}?v=5" defer></script>
+    {% block site_footer %}<footer class="site-footer"><span>© {% now "Y" %} تسکلی</span><span>هر بار، یک قدم جلوتر.</span></footer>{% endblock %}
+    <script src="{% static 'frontend/js/ui.js' %}?v=6" defer></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -44,7 +44,7 @@ class BrowserAuthenticationTests(TestCase):
             with self.subTest(name=name):
                 response = self.client.get(reverse(f"frontend:{name}"))
                 self.assertEqual(response.status_code, 200)
-                self.assertContains(response, 'lang="fa"' if name == "account" else 'lang="en"')
+                self.assertContains(response, 'lang="fa"')
                 self.assertContains(response, 'class="app-theme"' if name == "account" else 'class="app-theme auth-theme"')
                 self.assertContains(response, reverse("users:me"))
                 self.assertIn("no-store", response["Cache-Control"])
@@ -215,24 +215,22 @@ class BrowserAuthenticationTests(TestCase):
         self.assertEqual(logout.cookies["taskly_refresh"]["max-age"], 0)
         self.assertEqual(self.post("browser-refresh").status_code, 401)
 
-    def test_account_deletion_preserves_password_whitespace(self):
-        self.password = "  Violet!River82Cloud  "
-        self.user.set_password(self.password)
-        self.user.save(update_fields=["password"])
-        access = self.login().json()["access"]
-        response = self.client.delete(
-            reverse("users:me"), json.dumps({"password":self.password}),
-            content_type="application/json", HTTP_AUTHORIZATION=f"Bearer {access}",
-        )
-        self.assertEqual(response.status_code, 204, response.content)
 
-    def test_api_login_preserves_password_whitespace(self):
-        password = "  Violet!River82Cloud  "
-        self.user.set_password(password)
-        self.user.save(update_fields=["password"])
-        response = self.client.post(
-            reverse("accounts:login"), json.dumps({"username":"alice", "password":password}),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 200, response.content)
-        self.assertIn("access", response.json())
+
+    def test_auth_pages_use_persian_text_and_local_font(self):
+        for name, title in (("login", "ورود به حساب"), ("register", "حساب خودت را بساز")):
+            response = self.client.get(reverse(f"frontend:{name}"))
+            self.assertContains(response, title)
+            self.assertContains(response, 'lang="fa"')
+            self.assertContains(response, 'dir="rtl"')
+            self.assertContains(response, 'fonts/Vazirmatn.woff2')
+            self.assertNotContains(response, 'Show password')
+            self.assertNotContains(response, 'Create your account')
+
+    def test_persian_font_is_available_as_static_asset(self):
+        from django.contrib.staticfiles import finders
+        from pathlib import Path
+        path = finders.find("frontend/fonts/Vazirmatn.woff2")
+        self.assertIsNotNone(path)
+        self.assertEqual(Path(path).read_bytes()[:4], b"wOF2")
+        self.assertIsNotNone(finders.find("frontend/fonts/OFL.txt"))

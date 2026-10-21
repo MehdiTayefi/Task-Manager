@@ -1,4 +1,4 @@
-import { authFetch, readJSON } from "./auth.js?v=5";
+import { authFetch, readJSON } from "./auth.js?v=6";
 const $ = (selector) => document.querySelector(selector);
 const list = $("#task-list"), loading = $("#tasks-loading"), empty = $("#tasks-empty");
 const message = $("#page-message"), retry = $("#reload-tasks"), pager = $("#pagination");
